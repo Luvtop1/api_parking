@@ -1,12 +1,18 @@
-from typing import Any, Dict, Generator
+from typing import TYPE_CHECKING, Any, Dict, Generator
 
 import pytest
 from flask import Flask
-from flask.testing import FlaskClient
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy  # noqa: F401
 
 from app import create_app, db
 from app.models import Client, Parking
+
+if TYPE_CHECKING:
+    from flask.testing import FlaskClient as TestClient
+    from sqlalchemy.orm import Session
+else:
+    TestClient = object
+    Session = object
 
 
 @pytest.fixture(scope="module")
@@ -58,7 +64,7 @@ def client(app: Flask) -> TestClient:
 
 
 @pytest.fixture
-def db_session(app: Flask) -> Generator[SQLAlchemy.session, Any, None]:
+def db_session(app: Flask) -> Generator[Session, Any, None]:
     with app.app_context():
         yield db.session
         db.session.rollback()
