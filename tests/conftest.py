@@ -1,11 +1,11 @@
-from typing import Any, Dict, Generator
-
 import pytest
+from datetime import datetime, timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
+from typing import Generator, Any, Dict
 from app import create_app, db
-from app.models import Client, Parking
+from app.models import Client, Parking, ClientParking
+from werkzeug.test import TestClient
 
 
 @pytest.fixture(scope="module")
@@ -51,8 +51,8 @@ def app() -> Generator[Flask, Any, None]:
 
 
 @pytest.fixture
-def client(app: Flask) -> Flask.test_client:
-    """Test client fixture"""
+def client(app: Flask) -> TestClient:
+    """Фикстура тестового клиента"""
     return app.test_client()
 
 
