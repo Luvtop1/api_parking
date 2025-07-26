@@ -1,8 +1,7 @@
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 from flask.testing import FlaskClient
-from flask.wrappers import Response as FlaskResponse
 
 from app.models import ClientParking, Parking
 
