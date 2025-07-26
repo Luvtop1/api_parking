@@ -1,13 +1,10 @@
-from datetime import datetime, timedelta
-from typing import Any, Dict, Generator
-
-import pytest
+from typing import Generator, Any, Dict
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.test import TestClient
-
 from app import create_app, db
-from app.models import Client, ClientParking, Parking
+from app.models import Client, Parking
+import pytest
+from werkzeug.test import TestClient
 
 
 @pytest.fixture(scope="module")

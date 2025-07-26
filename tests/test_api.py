@@ -1,8 +1,8 @@
-from typing import Any
-
+import pytest
 from flask.testing import FlaskClient
-
-from app.models import ClientParking, Parking
+from app.models import ClientParking
+from app.models import Parking
+from typing import Any
 
 
 @pytest.mark.parametrize(
