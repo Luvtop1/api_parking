@@ -65,7 +65,8 @@ def client(app: Flask) -> TestClient:
 
 
 @pytest.fixture
-def db_session(app: Flask) -> Generator[scoped_session, Any, None]:  # Изменено Session на scoped_session
+def db_session(app: Flask) -> Generator[scoped_session, Any, None]:
+    # Изменено Session на scoped_session
     with app.app_context():
         yield db.session
         db.session.rollback()

@@ -1,7 +1,7 @@
 from typing import List
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
