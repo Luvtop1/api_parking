@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generator
 import pytest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy  # noqa: F401
-from sqlalchemy.orm import scoped_session  # Добавлен новый импорт
+from sqlalchemy.orm import scoped_session
 
 from app import create_app, db
 from app.models import Client, Parking
@@ -28,6 +28,7 @@ def app() -> Generator[Flask, Any, None]:
     )
 
     with app.app_context():
+        # Явно создаем все таблицы перед добавлением данных
         db.create_all()
 
         client1 = Client(
@@ -53,8 +54,16 @@ def app() -> Generator[Flask, Any, None]:
         )
         db.session.add_all([parking1, parking2])
 
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
+
         yield app
+
+        # Очищаем базу данных после тестов
+        db.session.remove()
         db.drop_all()
 
 
@@ -66,7 +75,6 @@ def client(app: Flask) -> TestClient:
 
 @pytest.fixture
 def db_session(app: Flask) -> Generator[scoped_session, Any, None]:
-    # Изменено Session на scoped_session
     with app.app_context():
         yield db.session
         db.session.rollback()

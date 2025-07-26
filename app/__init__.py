@@ -16,8 +16,8 @@ def create_app(config: Optional[Dict[str, Any]] = None) -> Flask:
 
     db.init_app(app)
 
+    # Импорты routes должны быть после инициализации app
     from . import routes
-
     app.register_blueprint(routes.api)
 
     return app
