@@ -1,11 +1,9 @@
-from typing import Any, Dict, cast
+from typing import Any, Dict
 
-# Сторонние зависимости
 import pytest
 from flask import Response
 from flask.testing import FlaskClient
 
-# Локальные импорты
 from app.models import ClientParking, Parking
 
 
@@ -32,7 +30,7 @@ def test_create_client(client: FlaskClient) -> None:
 def test_create_parking(client: FlaskClient) -> None:
     data = {"address": "New Parking, 1", "count_places": 20}
     response: Response = client.post("/parkings", json=data)
-    response_data: Dict[str, Any] = response.get_json()  # type: ignore[assignment]
+    response_data: Dict[str, Any] = response.get_json()
     assert response.status_code == 201
     assert "id" in response_data
 
@@ -41,12 +39,12 @@ def test_create_parking(client: FlaskClient) -> None:
 def test_enter_parking(client: FlaskClient) -> None:
     data = {"client_id": 1, "parking_id": 1}
     response: Response = client.post("/client_parkings", json=data)
-    response_data: Dict[str, Any] = response.get_json()  # type: ignore[assignment]
+    response_data: Dict[str, Any] = response.get_json()
     assert response.status_code == 201
     assert "id" in response_data
 
     parking_response: Response = client.get("/parkings/1")
-    parking_data: Dict[str, Any] = parking_response.get_json()  # type: ignore[assignment]
+    parking_data: Dict[str, Any] = parking_response.get_json()
     assert parking_data["count_available_places"] == 9
 
 
@@ -68,12 +66,12 @@ def test_exit_parking(client: FlaskClient, db_session: Any) -> None:
     assert enter_response.status_code == 201
 
     parking_response: Response = client.get("/parkings/1")
-    parking_data: Dict[str, Any] = parking_response.get_json()  # type: ignore[assignment]
+    parking_data: Dict[str, Any] = parking_response.get_json()
     assert parking_data["count_available_places"] == 9
 
     exit_response: Response = client.delete("/client_parkings", json=enter_data)
     assert exit_response.status_code == 200
 
     parking_response = client.get("/parkings/1")
-    parking_data = parking_response.get_json()  # type: ignore[assignment]
+    parking_data = parking_response.get_json()
     assert parking_data["count_available_places"] == 10

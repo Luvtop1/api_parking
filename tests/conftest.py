@@ -2,6 +2,7 @@ from typing import Any, Dict, Generator
 
 import pytest
 from flask import Flask
+from flask.testing import FlaskClient
 from flask_sqlalchemy import SQLAlchemy
 
 from app import create_app, db
