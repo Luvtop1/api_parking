@@ -1,8 +1,10 @@
-from flask import Blueprint, request, jsonify
 from datetime import datetime
-from typing import Tuple, Dict, Any, Optional
+from typing import Any, Dict, Optional, Tuple
+
+from flask import Blueprint, jsonify, request
 from flask.wrappers import Response
-from .models import db, Client, Parking, ClientParking
+
+from .models import Client, ClientParking, Parking, db
 
 api = Blueprint('api', __name__)
 

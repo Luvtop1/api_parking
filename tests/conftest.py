@@ -1,11 +1,13 @@
-import pytest
 from datetime import datetime, timedelta
+from typing import Any, Dict, Generator
+
+import pytest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from typing import Generator, Any, Dict
-from app import create_app, db
-from app.models import Client, Parking, ClientParking
 from werkzeug.test import TestClient
+
+from app import create_app, db
+from app.models import Client, ClientParking, Parking
 
 
 @pytest.fixture(scope="module")
