@@ -1,55 +1,49 @@
-from typing import List  # noqa: F401
+from typing import List
 
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
 
-class Client(db.Model):  # type: ignore[name-defined]
+class Client(db.Model):
     __tablename__ = "client"
 
-    id = db.Column(db.Integer, primary_key=True)  # type: ignore[attr-defined]
-    name = db.Column(db.String(50), nullable=False)  # type: ignore[attr-defined]
-    surname = db.Column(db.String(50), nullable=False)  # type: ignore[attr-defined]
-    credit_card = db.Column(db.String(50), nullable=True)  # type: ignore[attr-defined]
-    car_number = db.Column(db.String(10), nullable=True)  # type: ignore[attr-defined]
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    surname = db.Column(db.String(50), nullable=False)
+    credit_card = db.Column(db.String(50), nullable=True)
+    car_number = db.Column(db.String(10), nullable=True)
 
-    parkings: List["ClientParking"] = db.relationship(  # type: ignore[attr-defined]
+    parkings: List["ClientParking"] = db.relationship(
         "ClientParking", backref="client", lazy=True
     )
 
 
-class Parking(db.Model):  # type: ignore[name-defined]
+class Parking(db.Model):
     __tablename__ = "parking"
 
-    id = db.Column(db.Integer, primary_key=True)  # type: ignore[attr-defined]
-    address = db.Column(db.String(100), nullable=False)  # type: ignore[attr-defined]
-    opened = db.Column(db.Boolean)  # type: ignore[attr-defined]
-    count_places = db.Column(db.Integer, nullable=False)  # type: ignore[attr-defined]
-    count_available_places = db.Column(
-        db.Integer, nullable=False
-    )  # type: ignore[attr-defined]
+    id = db.Column(db.Integer, primary_key=True)
+    address = db.Column(db.String(100), nullable=False)
+    opened = db.Column(db.Boolean)
+    count_places = db.Column(db.Integer, nullable=False)
+    count_available_places = db.Column(db.Integer, nullable=False)
 
-    clients: List["ClientParking"] = db.relationship(  # type: ignore[attr-defined]
+    clients: List["ClientParking"] = db.relationship(
         "ClientParking", backref="parking", lazy=True
     )
 
 
-class ClientParking(db.Model):  # type: ignore[name-defined]
+class ClientParking(db.Model):
     __tablename__ = "client_parking"
 
-    id = db.Column(db.Integer, primary_key=True)  # type: ignore[attr-defined]
-    client_id = db.Column(  # type: ignore[attr-defined]
-        db.Integer, db.ForeignKey("client.id")
-    )
-    parking_id = db.Column(  # type: ignore[attr-defined]
-        db.Integer, db.ForeignKey("parking.id")
-    )
-    time_in = db.Column(db.DateTime, nullable=True)  # type: ignore[attr-defined]
-    time_out = db.Column(db.DateTime, nullable=True)  # type: ignore[attr-defined]
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+    parking_id = db.Column(db.Integer, db.ForeignKey("parking.id"))
+    time_in = db.Column(db.DateTime, nullable=True)
+    time_out = db.Column(db.DateTime, nullable=True)
 
     __table_args__ = (
-        db.UniqueConstraint(  # type: ignore[attr-defined]
+        db.UniqueConstraint(
             "client_id", "parking_id", name="unique_client_parking"
         ),
     )

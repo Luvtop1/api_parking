@@ -1,15 +1,15 @@
 from typing import Any, Dict
 
 import pytest
-from flask import Response
 from flask.testing import FlaskClient
+from flask.wrappers import Response as FlaskResponse
 
 from app.models import ClientParking, Parking
 
 
 @pytest.mark.parametrize("url", ["/clients", "/clients/1"])
 def test_get_methods(client: FlaskClient, url: str) -> None:
-    response: Response = client.get(url)
+    response = client.get(url)
     assert response.status_code == 200
     assert isinstance(response.json, (list, dict))
 
@@ -21,16 +21,16 @@ def test_create_client(client: FlaskClient) -> None:
         "credit_card": "9876543210987654",
         "car_number": "X999XX",
     }
-    response: Response = client.post("/clients", json=data)
-    response_data: Dict[str, Any] = response.get_json()  # type: ignore[assignment]
+    response = client.post("/clients", json=data)
+    response_data = response.get_json()
     assert response.status_code == 201
     assert "id" in response_data
 
 
 def test_create_parking(client: FlaskClient) -> None:
     data = {"address": "New Parking, 1", "count_places": 20}
-    response: Response = client.post("/parkings", json=data)
-    response_data: Dict[str, Any] = response.get_json()
+    response = client.post("/parkings", json=data)
+    response_data = response.get_json()
     assert response.status_code == 201
     assert "id" in response_data
 
@@ -38,13 +38,13 @@ def test_create_parking(client: FlaskClient) -> None:
 @pytest.mark.parking
 def test_enter_parking(client: FlaskClient) -> None:
     data = {"client_id": 1, "parking_id": 1}
-    response: Response = client.post("/client_parkings", json=data)
-    response_data: Dict[str, Any] = response.get_json()
+    response = client.post("/client_parkings", json=data)
+    response_data = response.get_json()
     assert response.status_code == 201
     assert "id" in response_data
 
-    parking_response: Response = client.get("/parkings/1")
-    parking_data: Dict[str, Any] = parking_response.get_json()
+    parking_response = client.get("/parkings/1")
+    parking_data = parking_response.get_json()
     assert parking_data["count_available_places"] == 9
 
 
@@ -62,14 +62,14 @@ def test_exit_parking(client: FlaskClient, db_session: Any) -> None:
         db_session.commit()
 
     enter_data = {"client_id": 1, "parking_id": 1}
-    enter_response: Response = client.post("/client_parkings", json=enter_data)
+    enter_response = client.post("/client_parkings", json=enter_data)
     assert enter_response.status_code == 201
 
-    parking_response: Response = client.get("/parkings/1")
-    parking_data: Dict[str, Any] = parking_response.get_json()
+    parking_response = client.get("/parkings/1")
+    parking_data = parking_response.get_json()
     assert parking_data["count_available_places"] == 9
 
-    exit_response: Response = client.delete("/client_parkings", json=enter_data)
+    exit_response = client.delete("/client_parkings", json=enter_data)
     assert exit_response.status_code == 200
 
     parking_response = client.get("/parkings/1")

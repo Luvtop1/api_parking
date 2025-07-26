@@ -43,12 +43,14 @@ def get_client(client_id: int) -> Response:
 @api.route("/clients", methods=["POST"])
 def create_client() -> Tuple[Response, int]:
     json_data = request.get_json()
-    data: Dict[str, Any] = json_data if isinstance(json_data, dict) else {}
+    if not isinstance(json_data, dict):
+        return jsonify({"error": "Invalid data"}), 400
+
     client = Client(
-        name=data["name"],
-        surname=data["surname"],
-        credit_card=data.get("credit_card"),
-        car_number=data.get("car_number"),
+        name=json_data["name"],
+        surname=json_data["surname"],
+        credit_card=json_data.get("credit_card"),
+        car_number=json_data.get("car_number"),
     )
     db.session.add(client)
     db.session.commit()
@@ -57,7 +59,10 @@ def create_client() -> Tuple[Response, int]:
 
 @api.route("/parkings", methods=["POST"])
 def create_parking() -> Tuple[Response, int]:
-    data: Dict[str, Any] = request.get_json()
+    data = request.get_json()
+    if not isinstance(data, dict):
+        return jsonify({"error": "Invalid data"}), 400
+
     parking = Parking(
         address=data["address"],
         opened=data.get("opened", True),
@@ -71,8 +76,8 @@ def create_parking() -> Tuple[Response, int]:
 
 @api.route("/client_parkings", methods=["POST"])
 def enter_parking() -> Tuple[Response, int]:
-    data: Optional[Dict[str, Any]] = request.get_json()
-    if not data:
+    data = request.get_json()
+    if not isinstance(data, dict):
         return jsonify({"error": "No data provided"}), 400
 
     client_id = data.get("client_id")
@@ -119,8 +124,8 @@ def enter_parking() -> Tuple[Response, int]:
 
 @api.route("/client_parkings", methods=["DELETE"])
 def exit_parking() -> Tuple[Response, int]:
-    data: Optional[Dict[str, Any]] = request.get_json()
-    if not data:
+    data = request.get_json()
+    if not isinstance(data, dict):
         return jsonify({"error": "No data provided"}), 400
 
     client_id = data.get("client_id")
