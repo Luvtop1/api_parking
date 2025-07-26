@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generator
 import pytest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy  # noqa: F401
+from sqlalchemy.orm import scoped_session  # Добавлен новый импорт
 
 from app import create_app, db
 from app.models import Client, Parking
@@ -64,7 +65,7 @@ def client(app: Flask) -> TestClient:
 
 
 @pytest.fixture
-def db_session(app: Flask) -> Generator[Session, Any, None]:
+def db_session(app: Flask) -> Generator[scoped_session, Any, None]:  # Изменено Session на scoped_session
     with app.app_context():
         yield db.session
         db.session.rollback()

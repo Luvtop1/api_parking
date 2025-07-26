@@ -6,3 +6,6 @@ pytest==7.1.2
 factory-boy==3.2.1
 faker==15.3.3
 pytest-flask==1.2.0
+mypy==0.910
+types-flask==1.1.4
+types-flask-sqlalchemy>=2.5.0
