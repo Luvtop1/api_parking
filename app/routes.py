@@ -42,7 +42,8 @@ def get_client(client_id: int) -> Response:
 
 @api.route("/clients", methods=["POST"])
 def create_client() -> Tuple[Response, int]:
-    data: Dict[str, Any] = request.get_json()
+    json_data = request.get_json()
+    data: Dict[str, Any] = json_data if isinstance(json_data, dict) else {}
     client = Client(
         name=data["name"],
         surname=data["surname"],

@@ -1,8 +1,8 @@
-from typing import Any
+from typing import cast, Dict, Any
 
 import pytest
 from flask.testing import FlaskClient
-
+from flask import Response
 from app.models import ClientParking, Parking
 
 
@@ -14,10 +14,10 @@ from app.models import ClientParking, Parking
     ],
 )
 def test_get_methods(client: FlaskClient, url: str) -> None:
-    response = client.get(url)
+    response: Response = client.get(url)
+    response_data = cast(Dict[str, Any], response.json)
     assert response.status_code == 200
-    assert isinstance(response.json, list) or isinstance(response.json, dict)
-
+    assert isinstance(response_data, (list, dict))
 
 def test_create_client(client: FlaskClient) -> None:
     data = {
@@ -26,9 +26,10 @@ def test_create_client(client: FlaskClient) -> None:
         "credit_card": "9876543210987654",
         "car_number": "X999XX",
     }
-    response = client.post("/clients", json=data)
+    response: Response = client.post("/clients", json=data)
+    response_data = cast(Dict[str, Any], response.json)
     assert response.status_code == 201
-    assert "id" in response.json
+    assert "id" in response_data
 
 
 def test_create_parking(client: FlaskClient) -> None:
