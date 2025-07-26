@@ -1,10 +1,12 @@
-from typing import Generator, Any, Dict
+from typing import Any, Dict, Generator
+
+import pytest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.test import TestClient
+
 from app import create_app, db
 from app.models import Client, Parking
-import pytest
-from werkzeug.test import TestClient
 
 
 @pytest.fixture(scope="module")
