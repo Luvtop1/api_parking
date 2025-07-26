@@ -43,7 +43,5 @@ class ClientParking(db.Model):
     time_out = db.Column(db.DateTime, nullable=True)
 
     __table_args__ = (
-        db.UniqueConstraint(
-            "client_id", "parking_id", name="unique_client_parking"
-        ),
+        db.UniqueConstraint("client_id", "parking_id", name="unique_client_parking"),
     )
