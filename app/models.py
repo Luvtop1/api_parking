@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class Client(db.Model):  # type: ignore[name-defined]
     __tablename__ = "client"
 
@@ -18,6 +19,7 @@ class Client(db.Model):  # type: ignore[name-defined]
         "ClientParking", backref="client", lazy=True
     )
 
+
 class Parking(db.Model):  # type: ignore[name-defined]
     __tablename__ = "parking"
 
@@ -30,6 +32,7 @@ class Parking(db.Model):  # type: ignore[name-defined]
     clients: List["ClientParking"] = db.relationship(  # type: ignore[attr-defined]
         "ClientParking", backref="parking", lazy=True
     )
+
 
 class ClientParking(db.Model):  # type: ignore[name-defined]
     __tablename__ = "client_parking"
