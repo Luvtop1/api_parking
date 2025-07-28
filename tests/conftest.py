@@ -27,7 +27,7 @@ def app() -> Generator[Flask, Any, None]:
             "SQLALCHEMY_TRACK_MODIFICATIONS": False,
             "SQLALCHEMY_ENGINE_OPTIONS": {
                 "connect_args": {"check_same_thread": False},
-                "poolclass": StaticPool
+                "poolclass": StaticPool,
             },
         }
     )
