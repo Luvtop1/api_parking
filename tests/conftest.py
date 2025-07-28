@@ -4,6 +4,7 @@ import pytest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy  # noqa: F401
 from sqlalchemy.orm import scoped_session
+from sqlalchemy.pool import StaticPool
 
 from app import create_app, db
 from app.models import Client, Parking
@@ -22,8 +23,12 @@ def app() -> Generator[Flask, Any, None]:
     app = create_app(
         {
             "TESTING": True,
-            "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
+            "SQLALCHEMY_DATABASE_URI": "sqlite://",
             "SQLALCHEMY_TRACK_MODIFICATIONS": False,
+            "SQLALCHEMY_ENGINE_OPTIONS": {
+                "connect_args": {"check_same_thread": False},
+                "poolclass": StaticPool
+            },
         }
     )
 
